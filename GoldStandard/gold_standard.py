@@ -61,6 +61,8 @@ class GoldStandard(object):
 
         #create article object
         article = Article(url,language='en')
+        article.download()
+        article.parse()
 
         #get number of typos
         n_typos = _get_num_typos(article.text)
