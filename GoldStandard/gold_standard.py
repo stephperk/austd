@@ -49,7 +49,7 @@ class GoldStandard:
             self.model = RandomForestClassifier()
 
             #set up vectors
-            self.y, self.X = dmatrices('label ~ typo_counts + text_subjectivity + text_positivity + text_negativity + title_neutrality',
+            self.y, self.X = dmatrices('label ~ typo_counts + text_subjectivity + text_positivity + text_negativity + title_neutrality + title_negativity',
                              self.data, return_type="dataframe")
 
             #flatten y to vector
@@ -90,6 +90,9 @@ class GoldStandard:
             #get vader intensity of title
             title_subjectivity_score = self._get_title_subjectivity(article.title)
 
+            #get vader negativity of title
+            title_negativity_score = self._get_title_negativity(article.title)
+
             #create final vector
             #label is just a placeholder
             features_dict = {"typo_counts": n_typos,
@@ -97,10 +100,11 @@ class GoldStandard:
                              "text_positivity": subjectivity_scores['text_positivity'],
                              "text_negativity": subjectivity_scores["text_negativity"],
                              "title_neutrality": title_subjectivity_score,
+                             "title_negativity": title_negativity_score,
                              "label": 1}
 
             input_y, input_X = dmatrices(
-                'label ~ typo_counts + text_subjectivity + text_positivity + text_negativity + title_neutrality',
+                'label ~ typo_counts + text_subjectivity + text_positivity + text_negativity + title_neutrality + title_negativity',
                 features_dict, return_type="dataframe")
             input_y = np.ravel(input_y)
 
@@ -280,12 +284,20 @@ class GoldStandard:
                 else:
                     return None
 
+        def _get_title_negativity(self, article_title):
+
+            analyzer = vader.SentimentIntensityAnalyzer()
+
+            scores = analyzer.polarity_scores(str(article_title))
+
+            return (scores['neg'])
+
         def _add_data_to_training(self, dict_to_add):
 
             data = self.data.append(dict_to_add)
 
             #set up vectors
-            self.y, self.X = dmatrices('label ~ typo_counts + text_subjectivity + text_positivity + text_negativity + title_neutrality',
+            self.y, self.X = dmatrices('label ~ typo_counts + text_subjectivity + text_positivity + text_negativity + title_neutrality + title_negativity',
                              self.data, return_type="dataframe")
 
             #flatten y to vector
