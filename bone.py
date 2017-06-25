@@ -34,8 +34,8 @@ def sms_reply():
 		resp.message('Article not found :(')
 
 	else:
-		fake_or_real = np.where(prediction['prediction'] == 0,'too biased to be credible','safe')
-		probability = prediction['probability'][0][0]
+		fake_or_real = np.where(prediction['prediction'] == 1,'too biased to be credible','safe')
+		probability = prediction['probability'][0][1]
 
 		#resp.message("probability = {}".format(probability))
 
@@ -43,7 +43,7 @@ def sms_reply():
 		.format(fake_or_real[0],str(int(probability * 100))))
 
 		if prediction['tagged_bias'] is not None:
-			resp.message('According to OpenSources, this website is {}.'.format(prediction['tagged_bias']))
+			resp.message('According to OpenSources, this website is tagged as \"{}\".'.format(prediction['tagged_bias']))
 
 	return str(resp)
 
