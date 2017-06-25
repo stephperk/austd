@@ -277,7 +277,7 @@ class GoldStandard:
                 if url.strip() in str(article_url).strip() or str(article_url).strip() in url.strip():
                     if len(str(article_url)) > 2:
                         print('matched')
-                        return(self.sources.loc[self.sources.url == str(article_url).strip(),]['type'][0])
+                        return(self.sources.loc[self.sources.url == url,]['type'][0])
                     else:
                         return None
 
