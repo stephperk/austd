@@ -37,7 +37,7 @@ def sms_reply():
 		fake_or_real = np.where(prediction['prediction'] == 1,'too biased to be credible','safe')
 		probability = prediction['probability'][0][1]
 
-		resp.message("probability = {}".format(probability))
+		resp.message("fake_or_real = {}".format(fake_or_real))
 
 		#resp.message('This article seems like it\'s {}; there\'s a {}% chance that you shouldn\'t trust it.'
 		#.format(fake_or_real[0],str(int(probability * 100))))
