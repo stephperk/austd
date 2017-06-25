@@ -35,8 +35,13 @@ def sms_reply():
 
 	else:
 		fake_or_real = np.where(prediction['prediction'] == 1,'too biased to be credible','safe')
+		probability = prediction['probability'][1]
 
-		resp.message('This article seems like it\'s {}'.format(fake_or_real[0]))
+		resp.message('This article seems like it\'s {}; there\'s a {}% chance \
+		that you shouldn\'t trust it.'.format(fake_or_real[0],str(int(probability * 100))))
+
+		if prediction['tagged_bias'] is not None:
+			resp.message('According to Open Sources, this website is {}.'.format(prediction['tagged_bias']))
 
 	return str(resp)
 
