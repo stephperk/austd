@@ -273,6 +273,9 @@ class GoldStandard:
             if re.match(r'^www\.',str(article_url)):
                 article_url = re.sub(r'^www\.','',article_url)
 
+            if article_url in list(self.sources.url):
+                return(self.sources.loc[self.sources.url == article_url]['type'][0])
+
             for url in self.sources.url:
                 if url.strip() in str(article_url).strip() or str(article_url).strip() in url.strip():
                     if len(str(article_url)) > 2:
