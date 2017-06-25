@@ -115,6 +115,7 @@ class GoldStandard:
             if 'fake' in str(fake_matches).strip():
                 prediction = [1.0]
                 probability = [0.0, 1.0]
+                self._add_data_to_training(features_dict)
 
             '''Set up stuff to return info on whether it matched a bias type'''
 
@@ -259,7 +260,7 @@ class GoldStandard:
 
         #returns the row from sources that matches the site website
         def _check_against_sources(self, article_url):
-
+            
             #check for http
             if re.match(r'^https?://',str(article_url)):
                 article_url = re.sub(r'^https?://','',article_url)
@@ -268,9 +269,29 @@ class GoldStandard:
             if re.match(r'^www\.',str(article_url)):
                 article_url = re.sub(r'^www\.','',article_url)
 
-            if str(article_url).strip() in self.sources.url and len(str(article_url)) > 2:
-                print('matched')
-                return(self.sources.loc[self.sources.url == str(article_url).strip(),]['type'][0])
+            for url in self.sources.url:
+                if url.strip() in str(article_url) or str(article_url) in url.strip():
+                    if len(str(article_url)) > 2:
+                        print('matched')
+                        return(self.sources.loc[self.sources.url == str(article_url).strip(),]['type'][0])
+                    else:
+                        return None
 
-            else:
-                return None
+                else:
+                    return None
+
+        def _add_data_to_training(self, dict_to_add):
+
+            data = self.data.append(dict_to_add)
+
+            #set up vectors
+            self.y, self.X = dmatrices('label ~ typo_counts + text_subjectivity + text_positivity + text_negativity + title_neutrality',
+                             self.data, return_type="dataframe")
+
+            #flatten y to vector
+            self.y = np.ravel(self.y)
+
+            #fit model
+            self.model.fit(self.X, self.y)
+
+            return None
