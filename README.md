@@ -43,7 +43,7 @@ You will get your answer back! plus a cute gif :)
 
 ## Citations
 
-[OpenSources] [![OpenSources Data](https://img.shields.io/badge/Data-OpenSources-blue.svg)](http://opensources.co)
+Continuous Curation: [![OpenSources Data](https://img.shields.io/badge/Data-OpenSources-blue.svg)](http://opensources.co)
 
 [Subjectivity Lexicon](http://mpqa.cs.pitt.edu/lexicons/subj_lexicon/) from the CS department at Pitt.
 
