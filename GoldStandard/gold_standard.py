@@ -97,7 +97,7 @@ class GoldStandard:
                              "text_positivity": subjectivity_scores['text_positivity'],
                              "text_negativity": subjectivity_scores["text_negativity"],
                              "title_neutrality": title_subjectivity_score,
-                             "label": 1}
+                             "label": 0}
 
             input_y, input_X = dmatrices(
                 'label ~ typo_counts + text_subjectivity + text_positivity + text_negativity + title_neutrality',
@@ -113,8 +113,8 @@ class GoldStandard:
 
             '''this changes the probability to be for sure fake if the site was tagged as fake'''
             if 'fake' in str(fake_matches).strip():
-                prediction = [1.0]
-                probability = [0.0, 1.0]
+                prediction = [0.0]
+                probability = [1.0, 0.0]
                 self._add_data_to_training(features_dict)
 
             '''Set up stuff to return info on whether it matched a bias type'''
@@ -260,7 +260,7 @@ class GoldStandard:
 
         #returns the row from sources that matches the site website
         def _check_against_sources(self, article_url):
-            
+
             #check for http
             if re.match(r'^https?://',str(article_url)):
                 article_url = re.sub(r'^https?://','',article_url)
