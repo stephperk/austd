@@ -35,19 +35,25 @@ def sms_reply():
 
 	else:
 		fake_or_real = prediction['prediction']
-		if len(list(fake_or_real)) > 1:
+		if 'list' in str(type(fake_or_real)):
 			fake_or_real = fake_or_real[0]
 		if fake_or_real == 1.0:
 			fake_or_real = 'too biased to be trusted'
 		else:
 			fake_or_real = 'safe'
 
-		probability = prediction['probability']
+		probability = prediction['probability'][0]
+
+		if fake_or_real == 'safe':
+			probability = np.min(probability)
+
+		else:
+			probability = np.max(probability)
 
 		#resp.message("data info: {}".format(list(set(austd.data.label))))
 
 		resp.message('This article seems like it\'s {}; there\'s a {}% chance that you shouldn\'t trust it.'
-		.format(fake_or_real,str(int(probability[0][1] * 100))))
+		.format(fake_or_real,str(int(probability * 100))))
 
 		if prediction['tagged_bias'] is not None:
 			resp.message('According to OpenSources, this website is tagged as \"{}\".'.format(prediction['tagged_bias']))
