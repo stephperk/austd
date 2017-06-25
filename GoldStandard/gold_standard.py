@@ -41,12 +41,16 @@ class GoldStandard:
             #get stop words
             self.stop_words = get_stop_words('en')
 
-            #create numeric labels
-            labels_to_vec = np.where(list(self.data.fake_or_real) == 'fake', 1, 0)
-            self.data['label'] = labels_to_vec
-
             #instantiate model
             self.model = RandomForestClassifier()
+
+            labels = []
+            for row in range(self.data.shape[0]):
+                if str(list(self.data['fake_or_real'])[row]) == 'fake':
+                    labels.append(1)
+                else:
+                    labels.append(0)
+            self.data['label'] = labels
 
             #set up vectors
             self.y, self.X = dmatrices('label ~ typo_counts + text_subjectivity + text_positivity + text_negativity + title_neutrality + title_negativity',
@@ -117,7 +121,7 @@ class GoldStandard:
 
             '''this changes the probability to be for sure fake if the site was tagged as fake'''
             if 'fake' in str(fake_matches).strip():
-                prediction = [1.0]
+                prediction = 1
                 self._add_data_to_training(features_dict)
 
             '''Set up stuff to return info on whether it matched a bias type'''
