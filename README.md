@@ -1,11 +1,11 @@
-# austd
+# Austd
 This is a Twilio/Flask application built to estimate the probability that a news article is "fake". 
 It also utilizes Bing's Spell Checker API to get number of typos and add it as a feature! The algorithm 
 is a Random Forest Classifier based on the sklearn open source code!!
 
 ...A product of the Global AI Hackathon NYC 2017...
 
-## What austd _really_ is
+## What Austd _Really_ Is
 
 We don't want to call news "fake" or "real". This tool is really just a way for you to check the 
 _esimated reliability_ of your news article. It gives you a guess as to whether or not you can rely on it
@@ -14,7 +14,8 @@ let your confirmation bias take you over.
 
 ## How To Use It
 
-Go to our page! (this section will be updated once we have a link.
+Go to our page! (this section will be updated once we have a link.)
+
 Or text it! (this will be updated too.)
 
 Enter a url to a news link!
