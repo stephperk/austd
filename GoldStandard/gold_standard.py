@@ -15,13 +15,14 @@ import re
 from nltk.tokenize import word_tokenize
 from stop_words import get_stop_words
 from nltk.sentiment import vader
+from newspaper.article import ArticleException
 
 class GoldStandard:
 
         def __init__(self):
 
             #read in data
-            self.data = pd.DataFrame.from_csv('../data/training_data.csv')
+            self.data = pd.DataFrame.from_csv('data/training_data.csv')
 
             #get rid of NaNs
             replacements = {
@@ -58,7 +59,7 @@ class GoldStandard:
             self.model.fit(self.X, self.y)
 
             #read in sources for mostly biased/fake news
-            self.sources = pd.DataFrame.from_csv('../data/sources.csv',index_col=None)
+            self.sources = pd.DataFrame.from_csv('data/sources.csv',index_col=None)
             self.sources.columns = ['url'] + list(self.sources.columns)[1:]
 
             #account for human crap
@@ -71,7 +72,12 @@ class GoldStandard:
             ###### do stuff to create final vector ######
 
             #create article object
-            article = Article(url,language='en')
+            try:
+                article = Article(url,language='en')
+
+            except ArticleException:
+                return('not found')
+
             article.download()
             article.parse()
 
@@ -119,7 +125,7 @@ class GoldStandard:
         def _read_in_subj_frame(self):
 
             # read in subjectivity data
-            with open('../data/subjectivity_clues_hltemnlp05/subjclueslen1-HLTEMNLP05.tff') as tff:
+            with open('data/subjectivity_clues_hltemnlp05/subjclueslen1-HLTEMNLP05.tff') as tff:
                 lines = tff.readlines()
 
             tff.close()
@@ -268,9 +274,3 @@ class GoldStandard:
 
             else:
                 return None
-
-
-
-
-
-

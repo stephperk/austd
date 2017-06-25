@@ -9,7 +9,8 @@ jieba3k==0.35.1
 lxml==3.8.0
 newspaper3k==0.2.2
 nltk==3.2.4
-numpy==1.13.0
+numpy==1.12.1
+numpydoc==0.6.0
 olefile==0.44
 pandas==0.20.2
 patsy==0.4.1
