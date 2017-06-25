@@ -42,7 +42,7 @@ class GoldStandard:
             self.stop_words = get_stop_words('en')
 
             #create numeric labels
-            labels_to_vec = np.where(self.data.fake_or_real == 'fake', 1, 0)
+            labels_to_vec = np.where(list(self.data.fake_or_real) == 'fake', 1, 0)
             self.data['label'] = labels_to_vec
 
             #instantiate model
