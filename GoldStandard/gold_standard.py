@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LogisticRegressionCV
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import train_test_split
 from sklearn import metrics
 from sklearn.cross_validation import cross_val_score
@@ -42,7 +43,7 @@ class GoldStandard(object):
     self.data['label'] = labels_to_vec
 
     #instantiate model
-    self.model = LogisticRegressionCV()
+    self.model = RandomForestClassifier()
 
     #set up vectors
     self.y, self.X = dmatrices('label ~ typo_counts + text_subjectivity + text_positivity + text_negativity + title_neutrality',
