@@ -274,7 +274,7 @@ class GoldStandard:
                 article_url = re.sub(r'^www\.','',article_url)
 
             if article_url in list(self.sources.url):
-                return(self.sources.loc[self.sources.url == article_url]['type'])
+                return(list(self.sources.loc[self.sources.url == article_url]['type'])[0])
 
             for url in self.sources.url:
                 if url.strip() in str(article_url).strip() or str(article_url).strip() in url.strip():
