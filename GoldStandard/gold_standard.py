@@ -118,7 +118,7 @@ class GoldStandard:
             '''this changes the probability to be for sure fake if the site was tagged as fake'''
             if 'fake' in str(fake_matches).strip():
                 prediction = [1.0]
-                probability = [0.0, 1.0]
+                probability = [[0.0, 1.0]]
                 self._add_data_to_training(features_dict)
 
             '''Set up stuff to return info on whether it matched a bias type'''
