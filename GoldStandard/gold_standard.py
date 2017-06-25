@@ -297,7 +297,7 @@ class GoldStandard:
 
         def _add_data_to_training(self, dict_to_add):
 
-            data = self.data.append(dict_to_add)
+            data = self.data.append(dict_to_add,ignore_index=True)
 
             #set up vectors
             self.y, self.X = dmatrices('label ~ typo_counts + text_subjectivity + text_positivity + text_negativity + title_neutrality + title_negativity',
