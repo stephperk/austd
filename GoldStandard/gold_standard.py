@@ -57,6 +57,14 @@ class GoldStandard:
             #fit model
             self.model.fit(self.X, self.y)
 
+            #read in sources for mostly biased/fake news
+            self.sources = pd.DataFrame.from_csv('../data/sources.csv',index_col=None)
+            self.sources.columns = ['url'] + list(self.sources.columns)[1:]
+
+            #account for human crap
+            self.sources.url = [word.strip() for word in self.sources.url]
+            self.sources.type = [word.strip() for word in self.sources.type]
+
 
         def predict_fakeness(self,url):
 
@@ -90,11 +98,23 @@ class GoldStandard:
                 features_dict, return_type="dataframe")
             input_y = np.ravel(input_y)
 
+            #get predictions and probabilities
             prediction = self.model.predict(input_X)
             probability = self.model.predict_proba(input_X)
 
+            #check for matching with list of biased/fake sources
+            fake_matches = self._check_against_sources(article.source_url)
+
+            '''this changes the probability to be for sure fake if the site was tagged as fake'''
+            if 'fake' in str(fake_matches).strip():
+                prediction = [1.0]
+                probability = [0.0, 1.0]
+
+            '''Set up stuff to return info on whether it matched a bias type'''
+
             #returning a value of 1 = too biased to trust, 0 = probably trustworthy
-            return {"prediction": prediction, "probability": probability}
+            return {"prediction": prediction, "probability": probability,
+                    "tagged_bias":fake_matches}
 
         def _read_in_subj_frame(self):
 
@@ -230,6 +250,26 @@ class GoldStandard:
             scores = analyzer.polarity_scores(str(article_title))
 
             return(scores['neu'])
+
+        #returns the row from sources that matches the site website
+        def _check_against_sources(self, article_url):
+
+            #check for http
+            if re.match(r'^https?://',str(article_url)):
+                article_url = re.sub(r'^https?://','',article_url)
+
+            #check for www
+            if re.match(r'^www\.',str(article_url)):
+                article_url = re.sub(r'^www\.','',article_url)
+
+            if str(article_url).strip() in self.sources.url and len(str(article_url)) > 2:
+                print('matched')
+                return(self.sources.loc[self.sources.url == str(article_url).strip(),]['type'][0])
+
+            else:
+                return None
+
+
 
 
 
