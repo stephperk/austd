@@ -8,7 +8,7 @@ idna==2.5
 jieba3k==0.35.1
 lxml==3.8.0
 newspaper3k==0.2.2
-nltk==3.2.4
+nltk==3.4.5
 numpy==1.12.1
 numpydoc==0.6.0
 olefile==0.44
